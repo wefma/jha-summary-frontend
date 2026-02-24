@@ -1,0 +1,2 @@
+# jha-summary-frontend
+日本ハイスコア協会のデータをまとめたJSONを読んでウェブページにする
