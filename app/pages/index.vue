@@ -261,7 +261,54 @@ const grouping_options = ref<GroupingOptions>({
           v-model:page="page"
           :total="totalGames"
           :items-per-page="PAGE_SIZE"
-        />
+          show-edges
+        >
+          <template #first>
+            <UButton
+              color="neutral"
+              variant="outline"
+              size="sm"
+              label="<<"
+              class="min-w-5"
+            />
+          </template>
+          <template #prev>
+            <UButton
+              color="neutral"
+              variant="outline"
+              size="sm"
+              label="<"
+              class="min-w-5"
+            />
+          </template>
+          <template #next>
+            <UButton
+              color="neutral"
+              variant="outline"
+              size="sm"
+              label=">"
+              class="min-w-5"
+            />
+          </template>
+          <template #last>
+            <UButton
+              color="neutral"
+              variant="outline"
+              size="sm"
+              label=">>"
+              class="min-w-5"
+            />
+          </template>
+          <template #ellipsis>
+            <UButton
+              as="div"
+              color="neutral"
+              variant="outline"
+              size="sm"
+              label="…"
+            />
+          </template>
+        </UPagination>
       </div>
     </ClientOnly>
   </UContainer>
