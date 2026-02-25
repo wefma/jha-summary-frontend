@@ -239,9 +239,10 @@ const grouping_options = ref<GroupingOptions>({
               color="neutral"
               class="mr-2"
               size="xs"
-              :icon="row.getIsExpanded() ? 'i-lucide-minus' : 'i-lucide-plus'"
               @click="row.toggleExpanded()"
-            />
+              ><p v-if="row.getIsExpanded()">-</p>
+              <p v-else>+</p></UButton
+            >
             <strong v-if="row.groupingColumnId === 'game'">{{
               row.getValue("game")
             }}</strong>
