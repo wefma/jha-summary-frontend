@@ -153,6 +153,11 @@ const columns = [
     header: "備考",
     cell: groupedLeafCell("notes"),
   },
+  {
+    accessorKey: "game_center",
+    header: "申請店舗",
+    cell: groupedLeafCell("game_center"),
+  },
 ];
 const grouping_options = ref<GroupingOptions>({
   groupedColumnMode: "remove",
