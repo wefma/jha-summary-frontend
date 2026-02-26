@@ -140,7 +140,7 @@ const columns = [
   },
   {
     accessorKey: "score_name",
-    header: "プレイヤー",
+    header: "スコアネーム",
     cell: groupedLeafCell("score_name"),
   },
   {
