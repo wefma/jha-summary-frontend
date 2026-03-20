@@ -43,6 +43,10 @@ const navigationLinks = [
     to: "/",
   },
   {
+    label: "概要",
+    to: "/about",
+  },
+  {
     label: "更新履歴",
     to: "/changelog",
   },
