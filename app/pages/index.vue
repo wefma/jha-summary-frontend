@@ -1,13 +1,8 @@
 <script setup lang="ts">
 import { getGroupedRowModel } from "@tanstack/vue-table";
 import type { GroupingOptions, CellContext } from "@tanstack/vue-table";
-const config = useRuntimeConfig();
 
-const { data: root, error } = useAsyncData(
-  "jha",
-  () => $fetch<any>(config.public.api),
-  { server: false },
-);
+const config = useRuntimeConfig();
 
 type RecordItem = {
   score: string;
@@ -20,9 +15,25 @@ type RecordItem = {
 type Machines = Record<string, Record<string, RecordItem[]>>;
 type Root = Record<string, Machines>;
 
+type JhaApiResponse = {
+  jha_summary?: Root;
+  updated_at?: string;
+};
+
+type TableRow = RecordItem & {
+  game: string;
+  department: string;
+};
+
+const { data: root } = useAsyncData<JhaApiResponse>(
+  "jha",
+  () => $fetch<JhaApiResponse>(config.public.api),
+  { server: false },
+);
+
 const groupedLeafCell =
   (columnId: keyof RecordItem) =>
-  ({ row, getValue }: CellContext<RecordItem, string>) => {
+  ({ row, getValue }: CellContext<TableRow, string>) => {
     if (row.getIsGrouped()) {
       if (row.groupingColumnId === "department") {
         const [firstLeaf] = row.getLeafRows();
@@ -33,7 +44,7 @@ const groupedLeafCell =
     return getValue();
   };
 
-function buildTableData(data: Root): any[] {
+function buildTableData(data: Root): TableRow[] {
   return Object.entries(data ?? {}).flatMap(([game, machines]) =>
     Object.entries(machines).flatMap(([department, records]) =>
       (Array.isArray(records) ? records : []).map((record) => ({
@@ -107,18 +118,17 @@ watch(
 const rows = computed(() =>
   buildTableData(Object.fromEntries(paginatedGames.value) as Root),
 );
-const updatedAt = ref(
-  computed(() => {
-    const dateStr = root.value?.updated_at;
-    if (typeof dateStr === "string") {
-      const date = new Date(dateStr);
-      if (!isNaN(date.getTime())) {
-        return date.toLocaleString("ja-JP");
-      }
+
+const updatedAt = computed(() => {
+  const dateStr = root.value?.updated_at;
+  if (typeof dateStr === "string") {
+    const date = new Date(dateStr);
+    if (!isNaN(date.getTime())) {
+      return date.toLocaleString("ja-JP");
     }
-    return "不明";
-  }),
-);
+  }
+  return "不明";
+});
 const columns = [
   {
     id: "title",
@@ -128,7 +138,7 @@ const columns = [
   {
     accessorKey: "department",
     header: "機体",
-    cell: ({ row }: CellContext<RecordItem, string>) =>
+    cell: ({ row }: CellContext<TableRow, string>) =>
       row.getIsGrouped()
         ? `${row.getValue("department")}部門`
         : row.getValue("department"),

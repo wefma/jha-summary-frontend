@@ -17,11 +17,47 @@ useSeoMeta({
   ogTitle: title,
   ogDescription: description,
 });
+
+const navigationLinks = [
+  {
+    label: "ホーム",
+    to: "/",
+  },
+  {
+    label: "更新履歴",
+    to: "/changelog",
+  },
+];
 </script>
 
 <template>
   <UApp>
-    <UHeader title="日本ハイスコア協会まとめ" :toggle="false" />
+    <header class="border-b border-default bg-default/75 backdrop-blur">
+      <UContainer
+        class="flex flex-col gap-4 py-4 sm:flex-row sm:items-center sm:justify-between"
+      >
+        <div>
+          <NuxtLink to="/" class="text-lg font-bold text-highlighted">
+            日本ハイスコア協会まとめ
+          </NuxtLink>
+          <p class="text-sm text-muted">
+            日本ハイスコア協会のデータを見やすくまとめる非公式サイト
+          </p>
+        </div>
+
+        <nav class="flex flex-wrap items-center gap-2">
+          <UButton
+            v-for="link in navigationLinks"
+            :key="link.to"
+            :to="link.to"
+            color="neutral"
+            variant="ghost"
+          >
+            {{ link.label }}
+          </UButton>
+        </nav>
+      </UContainer>
+    </header>
 
     <UMain>
       <NuxtPage />
