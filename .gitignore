@@ -23,3 +23,5 @@ logs
 
 # dev file
 public/dev/
+
+public/sw.js

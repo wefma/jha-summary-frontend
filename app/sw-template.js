@@ -1,6 +1,7 @@
-const CACHE_NAME = "jha-summary-v1";
-const API_CACHE_NAME = "jha-summary-api-v1";
-const SCORES_API_URL = "https://jha-summary-api-cors.wefma.net/jha-scores.json";
+const CACHE_VERSION = "__GIT_COMMIT_HASH__";
+const CACHE_NAME = `jha-summary-${CACHE_VERSION}`;
+const API_CACHE_NAME = `jha-summary-api-${CACHE_VERSION}`;
+const SCORES_API_URL = "__SCORES_API_URL__";
 const API_CACHE_TTL_MS = 12 * 60 * 60 * 1000;
 const PRECACHE_URLS = [
   "/",
