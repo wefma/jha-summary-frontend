@@ -1,7 +1,20 @@
 <script setup>
 useHead({
-  meta: [{ name: "viewport", content: "width=device-width, initial-scale=1" }],
-  link: [{ rel: "icon", href: "/favicon.ico" }],
+  meta: [
+    { name: "viewport", content: "width=device-width, initial-scale=1" },
+    { name: "theme-color", content: "#16a34a" },
+    { name: "mobile-web-app-capable", content: "yes" },
+    { name: "apple-mobile-web-app-capable", content: "yes" },
+    { name: "apple-mobile-web-app-status-bar-style", content: "default" },
+  ],
+  link: [
+    { rel: "icon", href: "/favicon.ico" },
+    { rel: "manifest", href: "/manifest.webmanifest" },
+    {
+      rel: "apple-touch-icon",
+      href: "/smartphone-icons/ios/apple-icons.png",
+    },
+  ],
   htmlAttrs: {
     lang: "ja",
   },
@@ -16,6 +29,12 @@ useSeoMeta({
   description,
   ogTitle: title,
   ogDescription: description,
+});
+
+onMounted(() => {
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js");
+  }
 });
 
 const navigationLinks = [

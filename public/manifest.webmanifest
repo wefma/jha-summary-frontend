@@ -1,0 +1,19 @@
+{
+  "name": "日本ハイスコア協会まとめ",
+  "short_name": "JHAまとめ",
+  "description": "日本ハイスコア協会のスコアをまとめた非公式サイトです。",
+  "lang": "ja",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#16a34a",
+  "icons": [
+    {
+      "src": "/smartphone-icons/android/pwa-icons.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
