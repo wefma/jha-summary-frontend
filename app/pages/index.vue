@@ -180,43 +180,27 @@ const grouping_options = ref<GroupingOptions>({
     <UCard class="my-5">
       <template #header>
         <h1 class="text-xl font-bold">ようこそ</h1>
-        <p>
-          このページは
-          <NuxtLink
-            class="text-blue-600 underline hover:no-underline"
-            to="https://sites.google.com/view/jha-arcade"
-            target="_blank"
-          >
-            日本ハイスコア協会
-          </NuxtLink>
-          のスコアをイイ感じにまとめて表示するための非公式ページです。
-        </p>
-        <p>
-          本サイトは
-          <a class="font-bold">
-            日本ハイスコア協会とは一切関係がありません。
-          </a>
-        </p>
-        <p>そのため予告なくサービスを停止する可能性があります。</p>
       </template>
-    </UCard>
-    <UCard class="mb-5">
-      <template #header>
-        <h2 class="text-lg font-bold">このページの仕組み</h2>
-      </template>
-      <div class="mb-5">
-        <p>
-          日本ハイスコア協会が管理しているGoogleスプレッドシートからデータを毎月1日に定期的に取得し表示します。
-        </p>
-        <p>
-          Googleスプレッドシート上のゲーム名や部門名の表記揺れによって
-          まとめて表示すべきものを誤って分けて表示してしまう可能性があります。
-          余力があれば直しますが直っていない可能性もあるのでご了承ください。
-        </p>
-      </div>
+      <p>
+        このページは
+        <NuxtLink
+          class="text-blue-600 underline hover:no-underline"
+          to="https://sites.google.com/view/jha-arcade"
+          target="_blank"
+        >
+          日本ハイスコア協会
+        </NuxtLink>
+        のスコアをイイ感じにまとめて表示するための非公式ページです。
+      </p>
+      <p>
+        本サイトは
+        <a class="font-bold"> 日本ハイスコア協会とは一切関係がありません。 </a>
+      </p>
+      <p>そのため予告なくサービスを停止する可能性があります。</p>
       <USeparator />
       <p class="text-sm m-2">最終更新日時: {{ updatedAt }}</p>
     </UCard>
+
 
     <ClientOnly>
       <UInput
