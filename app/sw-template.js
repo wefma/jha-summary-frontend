@@ -3,6 +3,7 @@ const CACHE_NAME = `jha-summary-${CACHE_VERSION}`;
 const API_CACHE_NAME = `jha-summary-api-${CACHE_VERSION}`;
 const SCORES_API_URL = "__SCORES_API_URL__";
 const API_CACHE_TTL_MS = 12 * 60 * 60 * 1000;
+const API_REFRESH_SYNC_TAG = `jha-summary-api-refresh-${CACHE_VERSION}`;
 const PRECACHE_URLS = [
   "/",
   "/changelog",
@@ -33,6 +34,49 @@ function isFreshApiCache(response) {
   return Date.now() - fetchedAt < API_CACHE_TTL_MS;
 }
 
+function createEmptyApiResponse() {
+  return new Response(JSON.stringify({ jha_summary: {} }), {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+    },
+  });
+}
+
+async function refreshApiCache(cache, request = SCORES_API_URL) {
+  const networkResponse = await fetch(request);
+
+  if (!networkResponse || networkResponse.status !== 200) {
+    throw new Error("Failed to refresh API cache");
+  }
+
+  const responseToCache = await createCacheableResponse(networkResponse.clone());
+  await cache.put(request, responseToCache);
+
+  return networkResponse;
+}
+
+async function scheduleApiRefresh() {
+  if (!self.registration.sync) {
+    return;
+  }
+
+  try {
+    if (typeof self.registration.sync.getTags === "function") {
+      const tags = await self.registration.sync.getTags();
+
+      if (tags.includes(API_REFRESH_SYNC_TAG)) {
+        return;
+      }
+    }
+
+    await self.registration.sync.register(API_REFRESH_SYNC_TAG);
+  } catch {
+    // Background Sync is best-effort; the next fetch will retry as well.
+  }
+}
+
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(PRECACHE_URLS)),
@@ -53,6 +97,19 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
+self.addEventListener("sync", (event) => {
+  if (event.tag !== API_REFRESH_SYNC_TAG) {
+    return;
+  }
+
+  event.waitUntil(
+    caches
+      .open(API_CACHE_NAME)
+      .then((cache) => refreshApiCache(cache))
+      .catch(() => undefined),
+  );
+});
+
 self.addEventListener("fetch", (event) => {
   const { request } = event;
 
@@ -70,20 +127,10 @@ self.addEventListener("fetch", (event) => {
         }
 
         try {
-          const networkResponse = await fetch(request);
-
-          if (!networkResponse || networkResponse.status !== 200) {
-            return networkResponse;
-          }
-
-          const responseToCache = await createCacheableResponse(
-            networkResponse.clone(),
-          );
-          await cache.put(request, responseToCache);
-
-          return networkResponse;
+          return await refreshApiCache(cache, request);
         } catch {
-          return cachedResponse || Response.error();
+          event.waitUntil(scheduleApiRefresh());
+          return cachedResponse || createEmptyApiResponse();
         }
       }),
     );
