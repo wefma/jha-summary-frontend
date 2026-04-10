@@ -29,6 +29,7 @@ useSeoMeta({
   description,
   ogTitle: title,
   ogDescription: description,
+  ogImage: "https://jha-summary.wefma.net/images/ogp.png",
 });
 
 onMounted(() => {
