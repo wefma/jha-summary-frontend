@@ -6,6 +6,11 @@ useHead({
     { name: "mobile-web-app-capable", content: "yes" },
     { name: "apple-mobile-web-app-capable", content: "yes" },
     { name: "apple-mobile-web-app-status-bar-style", content: "default" },
+    { name: "twitter:card", content: "summary_large_image" },
+    {
+      name: "twitter:image",
+      content: "https://jha-summary.wefma.net/images/ogp.png",
+    },
   ],
   link: [
     { rel: "icon", href: "/favicon.ico" },
